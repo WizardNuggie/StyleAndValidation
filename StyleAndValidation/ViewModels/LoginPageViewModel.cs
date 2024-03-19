@@ -54,7 +54,10 @@ namespace StyleAndValidation.ViewModels
         {
             appServices = service;
 
-            LoginCommand = new Command(async() => {bool success= await appServices.Login(Username, Password);  if (success) await AppShell.Current.GoToAsync("///MyPage"); });
+            LoginCommand = new Command(async() => { bool success = await appServices.Login(Username, Password); if (success)
+                {
+                    if (AppShell.Current.Navigation.ModalStack.Count > 0)
+                        await AppShell.Current.Navigation.PopToRootAsync(); await AppShell.Current.GoToAsync("///MyPage"); } });
             RegisterCommand = new Command(async () => 
             {
                 if(AppShell.Current.Navigation.ModalStack.Count>0)
