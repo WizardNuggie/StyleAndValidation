@@ -6,7 +6,8 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:viewmodels="clr-namespace:StyleAndValidation.ViewModels"
     Title="הרשמה"
-    x:DataType="viewmodels:RegisterPageViewModel">
+    x:DataType="viewmodels:RegisterPageViewModel"
+    Shell.FlyoutBehavior="Disabled">
 
     <!--  Styles  -->
     <ContentPage.Resources>
