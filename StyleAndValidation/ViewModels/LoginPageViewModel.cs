@@ -58,7 +58,7 @@ namespace StyleAndValidation.ViewModels
             RegisterCommand = new Command(async () => 
             {
                 if(AppShell.Current.Navigation.ModalStack.Count>0)
-                    await AppShell.Current.Navigation.PopModalAsync();
+                    await AppShell.Current.Navigation.PopToRootAsync();
                 await AppShell.Current.GoToAsync("Register");
             });
             ForgotPasswordCommand = new Command( () => { });
