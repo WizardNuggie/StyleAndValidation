@@ -9,8 +9,9 @@
         Background="LightCoral"
         HorizontalOptions="FillAndExpand">
         <Image
-            Aspect="Fill"
-            HeightRequest="400"
+            Aspect="AspectFit"
+            HeightRequest="{OnPlatform Android=400,
+                                       Default=800}"
             HorizontalOptions="FillAndExpand"
             Source="treasure.jpg"
             VerticalOptions="FillAndExpand" />

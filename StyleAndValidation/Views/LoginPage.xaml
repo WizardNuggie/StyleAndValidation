@@ -8,6 +8,20 @@
     x:DataType="viewmodels:LoginPageViewModel"
     Shell.PresentationMode="ModalAnimated">
 
+    <!--  Task 2C  -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="regularButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontSize" Value="15" />
+            </Style>
+
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <!--  ניטרול כפתור חזרה  -->
     <Shell.BackButtonBehavior>
         <BackButtonBehavior IsVisible="False" />
@@ -24,12 +38,11 @@
         <Entry IsPassword="{Binding ShowPassword}" Text="{Binding Password}" />
         <Button
             Margin="0,-42,0,0"
-            Background="Transparent"
             BorderColor="Transparent"
             Command="{Binding ShowPasswordCommand}"
             HorizontalOptions="End"
+            Style="{StaticResource regularButtonStyle}"
             Text="הצג/הסתר סיסמה"
-            TextColor="Black"
             ZIndex="2" />
         <Button
             Command="{Binding LoginCommand}"
@@ -37,19 +50,15 @@
             Text="התחבר" />
         <HorizontalStackLayout Spacing="200">
             <Button
-                Background="Transparent"
                 Command="{Binding RegisterCommand}"
-                FontAttributes="Bold"
-                FontSize="15"
+                Style="{StaticResource regularButtonStyle}"
                 Text="הרשמה"
-                TextColor="black"
                 VerticalOptions="Center" />
             <Button
-                Background="Transparent"
                 Command="{Binding ForgotPasswordCommand}"
                 HorizontalOptions="End"
+                Style="{StaticResource regularButtonStyle}"
                 Text="שכחתי סיסמה"
-                TextColor="Black"
                 VerticalOptions="End" />
         </HorizontalStackLayout>
     </VerticalStackLayout>

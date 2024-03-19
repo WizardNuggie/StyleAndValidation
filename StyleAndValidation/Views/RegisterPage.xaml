@@ -3,6 +3,7 @@
     x:Class="StyleAndValidation.Views.RegisterPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:viewmodels="clr-namespace:StyleAndValidation.ViewModels"
     Title="הרשמה"
     x:DataType="viewmodels:RegisterPageViewModel">
@@ -27,55 +28,84 @@
             <Setter Property="FontSize" Value="16" />
         </Style>
     </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
 
-    <VerticalStackLayout Padding="30" Spacing="20">
+            <!--  Title  -->
+            <Frame
+                BackgroundColor="Teal"
+                HeightRequest="70"
+                HorizontalOptions="FillAndExpand">
+                <Label
+                    FontSize="20"
+                    HorizontalOptions="Center"
+                    Text="ברוכים הבאים"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+            </Frame>
 
-        <!--  Title  -->
-        <Frame
-            BackgroundColor="Teal"
-            HeightRequest="70"
-            HorizontalOptions="FillAndExpand">
-            <Label
-                FontSize="20"
-                HorizontalOptions="Center"
-                Text="ברוכים הבאים"
-                TextColor="White"
-                VerticalOptions="Center" />
-        </Frame>
+            <!--  User Name  -->
+            <Grid RowDefinitions="auto,auto,*">
+                <Label Style="{StaticResource lblStyle}" Text="Username" />
+                <Entry
+                    Grid.Row="1"
+                    Style="{StaticResource entStyle}"
+                    Text="{Binding Username}" />
 
-        <!--  User Name  -->
-        <Grid RowDefinitions="auto,auto,*">
-            <Label Style="{StaticResource lblStyle}" Text="Username" />
+                <Label
+                    Grid.Row="2"
+                    IsVisible="{Binding ShowUserNameError}"
+                    Style="{StaticResource ErrorStyleLabel}"
+                    Text="{Binding UserNameErrorMEssage}" />
+            </Grid>
+            <!--
+                Task 3a:
+                added Grid wrapper + added Label with error style and text and isvisible bounded
+                to the viewmodel
+            -->
+            <Grid RowDefinitions="auto,auto,*">
+                <!--  Password  -->
+                <Label Style="{StaticResource lblStyle}" Text="Password" />
+                <Entry
+                    Grid.Row="1"
+                    IsPassword="True"
+                    Style="{StaticResource entStyle}"
+                    Text="{Binding Password}" />
+                <Label
+                    Grid.Row="2"
+                    IsVisible="{Binding ShowPasswordError}"
+                    Style="{StaticResource ErrorStyleLabel}"
+                    Text="{Binding PasswordErrorMessage}" />
+            </Grid>
+            <!--  FullName  -->
+            <Label Style="{StaticResource lblStyle}" Text="Full Name" />
+            <Entry Style="{StaticResource entStyle}" Text="{Binding FullName}" />
+            <!--  Email  -->
+            <Label Style="{StaticResource lblStyle}" Text="Email" />
             <Entry
-                Grid.Row="1"
+                Keyboard="Email"
                 Style="{StaticResource entStyle}"
-                Text="{Binding Username}" />
-            <Label
-                Grid.Row="2"
-                IsVisible="{Binding ShowUserNameError}"
-                Text="{Binding UserNameErrorMEssage}" />
-        </Grid>
-        <!--  Password  -->
-        <Label Style="{StaticResource lblStyle}" Text="Password" />
-        <Entry
-            IsPassword="True"
-            Style="{StaticResource entStyle}"
-            Text="{Binding Password}" />
-        <!--  FullName  -->
-        <Label Style="{StaticResource lblStyle}" Text="Full Name" />
-        <Entry Style="{StaticResource entStyle}" Text="{Binding FullName}" />
-        <!--  Email  -->
-        <Label Style="{StaticResource lblStyle}" Text="Email" />
-        <Entry
-            Keyboard="Email"
-            Style="{StaticResource entStyle}"
-            Text="{Binding Email}" />
-        <!--  כפתור הרשמה  -->
-        <Button
-            Command="{Binding RegisterCommand}"
-            HorizontalOptions="FillAndExpand"
-            Style="{StaticResource btnStyle}"
-            Text="Register" />
-    </VerticalStackLayout>
-
+                Text="{Binding Email}" />
+            <!--  Task 3b+3c  -->
+            <Grid RowDefinitions="auto,auto,*">
+                <Label Style="{StaticResource lblStyle}" Text="תאריך לידה" />
+                <!--
+                    Task 3b+3c
+                    https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/datepicker?view=net-maui-8.0
+                -->
+                <DatePicker
+                    Grid.Row="1"
+                    Date="{Binding BirthDate}"
+                    Format="dd/MM/yyyy"
+                    MaximumDate="{Binding ValidMaximumDate}"
+                    MinimumDate="01/01/1925" />
+            </Grid>
+            <!--  כפתור הרשמה  -->
+            <Button
+                Command="{Binding RegisterCommand}"
+                HorizontalOptions="FillAndExpand"
+                Style="{StaticResource btnStyle}"
+                Text="Register" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

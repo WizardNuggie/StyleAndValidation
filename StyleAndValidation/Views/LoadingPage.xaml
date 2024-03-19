@@ -12,7 +12,7 @@
 
         <Label
             HorizontalOptions="Center"
-            Text="רושמים אותך לאפליקציה...."
+            Text="{Binding Message}"
             VerticalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>

@@ -8,6 +8,32 @@ using System.Windows.Input;
 
 namespace StyleAndValidation.ViewModels
 {
+    #region Task 2a הסבר לפתרון
+
+    /*Task 2a:
+     * אנחנו נכתוב את הקוד בפעולה המחוברת לכפתור ההתחברות
+     * LOGINCOMMAND
+     * המוגדרת בפעולה הבונה:
+     * השלבים להוספת מסך טעינה:
+     * 1. נזמן את הקריאה למסך
+     * 2. נבצע את פעולת הלוגין
+     * 3. בסיום הפעולה נסגור את מסך הטעינה
+     * 
+     */
+    #endregion
+    #region Task 2b הסבר לפתרון
+
+    /*Task 2b:
+     * אנחנו נכתוב את הקוד בפעולה המחוברת לכפתור ההתחברות
+     * LOGINCOMMAND
+     * המוגדרת בפעולה הבונה:
+     * השלבים :
+     * 1. נוסיף פרמטר נוסף שהינה הפעולה שמגדירה מתי ניתן הפעולה תהיה זמינה
+     * 2. נכתוב את הפעולה
+     * 3. בכל הנקודות (כלומר בעדכון שם משתמש וססמה) נקרא לבדיקה חוזרת של התנאי לזמינות הפעולה
+     * 
+     */
+    #endregion
     public class LoginPageViewModel:ViewModelBase
     {
        readonly AppServices appServices;
@@ -19,8 +45,18 @@ namespace StyleAndValidation.ViewModels
         #endregion
 
         #region Properties
-        public string Password { get => password; set { password = value; OnPropertyChanged(); } }
-        public bool ShowPassword { get => showPassword; set{ showPassword = value; OnPropertyChanged(); } }
+        public string Password
+        { 
+            get => password; 
+            set 
+            {
+                password = value;
+                OnPropertyChanged();
+                //Task 2b
+                ValidateCommands();
+            } 
+        }
+        public bool ShowPassword { get => showPassword; set{ showPassword = value; OnPropertyChanged();  } }
         public string Username
         {
             get => username;
@@ -32,11 +68,13 @@ namespace StyleAndValidation.ViewModels
 
                     OnPropertyChanged();
                     //בדיקה האם הכפתור צריך להיות מנוטרל או פעיל
-                    var cmd = LoginCommand as Command;
-                    cmd.ChangeCanExecute();
+                    //Task 2b
+                    ValidateCommands();
+                    
                 }
             }
         }
+
 
 
         #endregion
@@ -54,10 +92,28 @@ namespace StyleAndValidation.ViewModels
         {
             appServices = service;
 
-            LoginCommand = new Command(async() => { bool success = await appServices.Login(Username, Password); if (success)
+            LoginCommand = new Command(async () =>
+            {
+                //הקפצת מסך הטעינה
+                await AppShell.Current.GoToAsync("Loading");
+               //נעדכן את ההודעה המוצגת למשתמש
+                var loading = AppShell.Current.Navigation.ModalStack.Last().BindingContext as LoadingPageViewModel;
+                if (loading != null) { loading.Message = "המתינו בזמן שמנסים לחבר אותכם לאפליקציה"; }
+                bool success = await appServices.Login(Username, Password);
+                //נסגור את מסך הטעינה
+                await AppShell.Current.Navigation.PopAsync();
+                if (success)
                 {
-                    if (AppShell.Current.Navigation.ModalStack.Count > 0)
-                        await AppShell.Current.Navigation.PopToRootAsync(); await AppShell.Current.GoToAsync("///MyPage"); } });
+                    //אם יש עוד חלונות שנמצעים מעל חלונות האחרים- נרוקן אותם
+                    if (AppShell.Current.Navigation.ModalStack.Count > 0) { AppShell.Current.Navigation.PopToRootAsync(); }
+
+                    await AppShell.Current.GoToAsync("///MyPage");
+                }
+                else
+                   await AppShell.Current.DisplayAlert("שגיאת התחברות", "שם משתמש או סיסמה שגויה", "אישור");
+
+            }, ValidateLogin
+            ) ;
             RegisterCommand = new Command(async () => 
             {
                 if(AppShell.Current.Navigation.ModalStack.Count>0)
@@ -67,6 +123,22 @@ namespace StyleAndValidation.ViewModels
             ForgotPasswordCommand = new Command( () => { });
             ShowPasswordCommand = new Command(() => ShowPassword = !ShowPassword);
             ShowPassword = true;
+        }
+
+
+        //Task 2b
+        /// <summary>
+        /// מתי פעולת הLOGIN אפשרית
+        /// </summary>
+        /// <returns></returns>
+        private bool ValidateLogin()
+        {
+            return !(string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password));
+        }
+        private void ValidateCommands()
+        {
+            var cmd = LoginCommand as Command;
+            cmd.ChangeCanExecute();
         }
     }
 }

@@ -28,6 +28,9 @@ namespace StyleAndValidation.ViewModels
         #region validation messages
         bool showUserNameError;
         string userNameErrorMessage;
+        //Task 3a
+        bool showPasswordError;
+        string passwordErrorMessage;
         #endregion
         #endregion
 
@@ -39,13 +42,13 @@ namespace StyleAndValidation.ViewModels
                     username = value;
                     ValidateUserName();
                     OnPropertyChanged();
-                   
+                    
                 }
             }
         }
 
 
-        public string Password { get=>password; set { password = value; OnPropertyChanged(); } }
+        public string Password { get=>password; set { password = value; OnPropertyChanged(); ValidatePassword(); } }
         public string FullName { get=>fullName; set { fullName = value; OnPropertyChanged(); } }
         public string Email { get=>email; set { email = value; OnPropertyChanged(); } }
 
@@ -54,6 +57,11 @@ namespace StyleAndValidation.ViewModels
         #region Validation Properties
         public bool ShowUserNameError { get=>showUserNameError;  set { showUserNameError = value; OnPropertyChanged(); } }
         public string UserNameErrorMEssage { get => userNameErrorMessage; set { userNameErrorMessage = value; OnPropertyChanged(); } }
+        //Task 3a
+        public bool ShowPasswordError { get=>showPasswordError; set { showPasswordError = value; OnPropertyChanged(); } }
+        public string PasswordErrorMessage { get=>passwordErrorMessage;  set { passwordErrorMessage = value; OnPropertyChanged(); } }
+        //Task 3c
+        public DateTime ValidMaximumDate { get => DateTime.Today.AddYears(-13); }
         #endregion
         
     #endregion
@@ -61,13 +69,16 @@ namespace StyleAndValidation.ViewModels
         
         #region Commands
         public ICommand RegisterCommand { get; protected set; }
-        
+
         #endregion
         public RegisterPageViewModel(AppServices service)
         {
             appServices = service;
             RegisterCommand = new Command(async () => await RegisterUser(),()=>ValidateAll()) ;
             Username = string.Empty;
+            Password = string.Empty;
+            //Task 3c
+            BirthDate=new DateTime(2000,1,1);   
 
         }
 
@@ -77,15 +88,17 @@ namespace StyleAndValidation.ViewModels
            User registered=new () { BirthDate=BirthDate, Email=Email, FullName=FullName, Password=Password, Username=Username};
             #region מסך טעינה
             await AppShell.Current.GoToAsync("Loading");
-           
+
             /*אם נרצה לעדכן את ההודעות שמוצגות במסך הפופאפ
-             * int index=AppShell.Current.CurrentPage.Navigation.ModalStack.Count-1;
-           
-            var loading=AppShell.Current.CurrentPage.Navigation.ModalStack[index].BindingContext as LoadingPageViewModel;
             */
+
+            var loading = Shell.Current.CurrentPage.Navigation.ModalStack.Last().BindingContext as LoadingPageViewModel;
+            if (loading != null)
+                loading.Message = "המתן בזמן שאנו רושמים אותך לאפליקציה...";
             #endregion
             bool ok = await appServices.RegisterUserAsync(registered);
-
+            loading.Message = "כמעט סיימנו....";
+            await Task.Delay(3000);
             #region סגירת מסך טעינה
             await AppShell.Current.Navigation.PopModalAsync();
             //   await loading.Close();
@@ -93,6 +106,7 @@ namespace StyleAndValidation.ViewModels
             if (ok)
             {
                 await AppShell.Current.DisplayAlert("הצלחה", "הנך מועבר.ת למסך הכניסה", "Ok");
+                await AppShell.Current.Navigation.PopToRootAsync();
                 await AppShell.Current.GoToAsync("Login");
             }
            else
@@ -104,6 +118,31 @@ namespace StyleAndValidation.ViewModels
         }
 
         #region Validation
+
+        //Task 3a
+        private bool ValidatePassword()
+        {
+            #region שימוש בREGEX
+            string pattern = @"^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,16}$";
+
+            if (Regex.IsMatch(Password, pattern))
+            {
+                ShowPasswordError = false;
+                ValidateCommand();
+                return true;
+            }
+            ShowPasswordError = true;
+            PasswordErrorMessage = "סיסמה תקינה צריכה להכיל בין  4-16תווים, חייבים להכיל\r\nאות גדולה אחת לפחות, מספר אחד לפחות ותו מיוחד אחד לפחות (כגון #, @ וכו').";
+            ValidateCommand();
+            return false;   
+            #endregion
+        }
+        private void ValidateCommand()
+        {
+            //בדיקה האם הכפתור צריך להיות מנוטרל או פעיל
+            var cmd = RegisterCommand as Command;
+            cmd.ChangeCanExecute();
+        }
         private bool ValidateUserName()
         {
             #region שימוש בREGEX
@@ -126,9 +165,8 @@ namespace StyleAndValidation.ViewModels
                     break;
 
             }
-            //בדיקה האם הכפתור צריך להיות מנוטרל או פעיל
-            var cmd = RegisterCommand as Command;
-            cmd.ChangeCanExecute();
+
+            ValidateCommand();
             return ok;
         }
 
@@ -136,7 +174,7 @@ namespace StyleAndValidation.ViewModels
 
         private bool ValidateAll()
         {
-            return !ShowUserNameError;
+            return !ShowUserNameError&&!ShowPasswordError ;
         }
 
         #endregion

@@ -15,6 +15,9 @@ namespace StyleAndValidation.ViewModels
         public bool IsRunning
         {
             get => isRunning; set { isRunning=value; OnPropertyChanged(); }}
+
+        private string message;
+        public string Message { get => message;set { message = value; OnPropertyChanged(); }}   
         
         public LoadingPageViewModel()
         {
