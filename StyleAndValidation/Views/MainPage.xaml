@@ -23,12 +23,12 @@
     </ContentPage.Resources>
 
     <VerticalStackLayout>
-        <Label FontSize="Large" Text="מסך כניסה" />
-        <Button Command="{Binding LoginCommand}" Text="התחברות" />
+        <Label FontSize="Large" Text="Home Page" />
+        <Button Command="{Binding LoginCommand}" Text="Log in" />
         <Button
             BackgroundColor="BlueViolet"
             Command="{Binding RegisterCommand}"
-            Text="הרשמה" />
+            Text="Sign up" />
     </VerticalStackLayout>
 
 

@@ -98,7 +98,7 @@ namespace StyleAndValidation.ViewModels
                 await AppShell.Current.GoToAsync("Loading");
                //נעדכן את ההודעה המוצגת למשתמש
                 var loading = AppShell.Current.Navigation.ModalStack.Last().BindingContext as LoadingPageViewModel;
-                if (loading != null) { loading.Message = "המתינו בזמן שמנסים לחבר אותכם לאפליקציה"; }
+                if (loading != null) { loading.Message = "Please wait while we are trying to connect you to the app"; }
                 bool success = await appServices.Login(Username, Password);
                 //נסגור את מסך הטעינה
                 await AppShell.Current.Navigation.PopAsync();
@@ -110,7 +110,7 @@ namespace StyleAndValidation.ViewModels
                     await AppShell.Current.GoToAsync("///MyPage");
                 }
                 else
-                   await AppShell.Current.DisplayAlert("שגיאת התחברות", "שם משתמש או סיסמה שגויה", "אישור");
+                   await AppShell.Current.DisplayAlert("Log in failed", "The username/password are incorrect", "Ok");
 
             }, ValidateLogin
             ) ;

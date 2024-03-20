@@ -97,7 +97,7 @@ namespace StyleAndValidation.ViewModels
                 loading.Message = "המתן בזמן שאנו רושמים אותך לאפליקציה...";
             #endregion
             bool ok = await appServices.RegisterUserAsync(registered);
-            loading.Message = "כמעט סיימנו....";
+            loading.Message = "Almost finished";
             await Task.Delay(3000);
             #region סגירת מסך טעינה
             await AppShell.Current.Navigation.PopModalAsync();
@@ -105,14 +105,14 @@ namespace StyleAndValidation.ViewModels
             #endregion
             if (ok)
             {
-                await AppShell.Current.DisplayAlert("הצלחה", "הנך מועבר.ת למסך הכניסה", "Ok");
+                await AppShell.Current.DisplayAlert("Success", "You are being redirected to the log in page", "Ok");
                 await AppShell.Current.Navigation.PopToRootAsync();
                 await AppShell.Current.GoToAsync("Login");
             }
            else
             {
               
-                await AppShell.Current.DisplayAlert("או ויי", "משהו לא טוב קרה", "Ok");
+                await AppShell.Current.DisplayAlert("Oh no", "Something bad happened", "Ok");
             }
           
         }
@@ -132,7 +132,7 @@ namespace StyleAndValidation.ViewModels
                 return true;
             }
             ShowPasswordError = true;
-            PasswordErrorMessage = "סיסמה תקינה צריכה להכיל בין  4-16תווים, חייבים להכיל\r\nאות גדולה אחת לפחות, מספר אחד לפחות ותו מיוחד אחד לפחות (כגון #, @ וכו').";
+            PasswordErrorMessage = "A valid password must be 4-16 characters, and must contain at least 1 capital letter, 1 number and 1 special character (like '@'/'#' etc.)";
             ValidateCommand();
             return false;   
             #endregion
@@ -156,7 +156,7 @@ namespace StyleAndValidation.ViewModels
                 case false:
                 //הצג הודעת שגיאה
                 ShowUserNameError = true;
-                UserNameErrorMEssage = "שם משתמש וסיסמה לא תקינים";
+                UserNameErrorMEssage = "Username invalid";
                     break;
                 case true:
                     //בטל הודעת שגיאה

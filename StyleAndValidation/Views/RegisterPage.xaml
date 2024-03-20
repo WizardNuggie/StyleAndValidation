@@ -40,7 +40,7 @@
                 <Label
                     FontSize="20"
                     HorizontalOptions="Center"
-                    Text="ברוכים הבאים"
+                    Text="Welcome"
                     TextColor="White"
                     VerticalOptions="Center" />
             </Frame>
@@ -89,7 +89,7 @@
                 Text="{Binding Email}" />
             <!--  Task 3b+3c  -->
             <Grid RowDefinitions="auto,auto,*">
-                <Label Style="{StaticResource lblStyle}" Text="תאריך לידה" />
+                <Label Style="{StaticResource lblStyle}" Text="Date of birth" />
                 <!--
                     Task 3b+3c
                     https://learn.microsoft.com/en-us/dotnet/maui/user-interface/controls/datepicker?view=net-maui-8.0

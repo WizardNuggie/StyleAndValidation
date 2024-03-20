@@ -31,10 +31,10 @@
 
         <!--  User Name  -->
 
-        <Label Text="שם משתמש" />
+        <Label Text="Username" />
         <Entry Text="{Binding Username}" />
         <!--  Password  -->
-        <Label Text="סיסמה" />
+        <Label Text="Password" />
         <Entry IsPassword="{Binding ShowPassword}" Text="{Binding Password}" />
         <Button
             Margin="0,-42,0,0"
@@ -42,7 +42,7 @@
             Command="{Binding ShowPasswordCommand}"
             HorizontalOptions="End"
             Style="{StaticResource regularButtonStyle}"
-            Text="הצג/הסתר סיסמה"
+            Text="Show/Hide password"
             ZIndex="2" />
         <Button
             Command="{Binding LoginCommand}"
@@ -58,7 +58,7 @@
                 Command="{Binding ForgotPasswordCommand}"
                 HorizontalOptions="End"
                 Style="{StaticResource regularButtonStyle}"
-                Text="שכחתי סיסמה"
+                Text="Forgot my password"
                 VerticalOptions="End" />
         </HorizontalStackLayout>
     </VerticalStackLayout>
